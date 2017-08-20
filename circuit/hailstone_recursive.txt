@@ -1,0 +1,42 @@
+r_hailstone:
+  ADDIU $sp, $sp, -24
+  SW $ra, 20($sp)
+  SW $fp, 16($sp)
+  ADDIU $t0, $zero, 1
+  BNE $a0, $t0, ELSE1
+  nop
+  ADDU $v0, $v0, $zero
+  LW $fp, 16($sp)
+  LW $ra, 20($sp)
+  ADDIU $sp, $sp, 24
+  JR $ra
+  nop
+
+ELSE1:
+  ADDU $t0, $a0, $zero
+  SLL $t1, $t0, 31
+  BNE $t1, $zero, ELSE2
+  nop
+  SRL $t0, $t0, 1
+  ADDU $a0, $t0, $zero
+  JAL r_hailstone
+  ADDIU $v0, $v0, 1
+  LW $fp, 16($sp)
+  LW $ra, 20($sp)
+  ADDIU $sp, $sp, 24
+  JR $ra
+  nop
+
+ELSE2:
+  ADDU $t0, $a0, $zero
+  ADDU $t0, $t0, $t0
+  ADDU $t0, $t0, $a0
+  ADDIU $t0, $t0, 1
+  ADDU $a0, $t0, $zero
+  JAL r_hailstone
+  ADDIU $v0, $v0, 1
+  LW $fp, 16($sp)
+  LW $ra, 20($sp)
+  ADDIU $sp, $sp, 24
+  JR $ra
+  nop

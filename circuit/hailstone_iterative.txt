@@ -1,0 +1,33 @@
+i_hailstone:
+  ADDIU $sp, $sp, -24
+  SW $ra, 20($sp)
+  SW $fp, 16($sp)
+  ADDU $t0, $zero, $a0
+  ADDIU $t1, $zero, 1
+  SUBU $v0, $v0, $v0
+
+Loop1:
+  BEQ $t0, $t1, Exit
+  nop
+  ADDIU $v0, $v0, 1
+  SLL $t2, $t0, 31
+  BNE $t2, $zero, Loop2
+  nop
+  SRL $t0, $t0, 1
+  J Loop1
+  nop
+
+Loop2:
+  ADDU $t3, $t0, $zero
+  ADDU $t0, $t0, $t0
+  ADDU $t0, $t0, $t3
+  ADDIU $t0, $t0, 1
+  J Loop1
+  nop
+
+Exit:
+  LW $fp, 16($sp)
+  LW $ra, 20($sp)
+  ADDIU $sp, $sp, 24
+  JR $ra
+  nop

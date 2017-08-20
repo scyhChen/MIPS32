@@ -1,0 +1,75 @@
+m_hailstone:
+  ADDIU $sp, $sp, -24
+  SW $ra, 20($sp)
+  SW $fp, 16($sp)
+  ADDU $t0, $zero, $a0
+  ADDU $t1, $zero, $a1
+  ADDU $t2, $zero, $a2
+  SUBU $t3, $t0, $t2
+  SRL $t3, $t3, 31
+  SLL $t6, $t0, 2
+  ADDU $t6, $t6, $t1
+  LW $t6, 0($t6)
+  ADDIU $t4, $zero, 1
+  MOVZ $t4, $zero, $t6
+  AND $t5, $t3, $t4
+  BEQ $t5, $zero, LOOP1
+  nop
+  ADDU $v0, $v0, $t6
+  LW $fp, 16($sp)
+  LW $ra, 20($sp)
+  ADDIU $sp, $sp, 24
+  JR $ra
+  nop
+
+LOOP1:
+  ADDIU $t3, $zero, 1
+  BNE $t0, $t3, ELSE1
+  ADDU $v0, $v0, $zero
+  LW $fp, 16($sp)
+  LW $ra, 20($sp)
+  ADDIU $sp, $sp, 24
+  JR $ra
+  nop
+
+ELSE1:
+  SLL $t3, $t0, 31
+  BNE $t3, $zero, ELSE2
+  nop
+  SRL $a0, $t0, 1
+  JAL m_hailstone
+  ADDIU $v0, $v0, 1
+  SUBU $t3, $t0, $t2
+  SRL $t3, $t3, 31
+  BNE $t3, $zero, EXIT
+  LW $fp, 16($sp)
+  LW $ra, 20($sp)
+  ADDIU $sp, $sp, 24
+  JR $ra
+  nop
+
+ELSE2:
+  ADDU $a0, $t0, $t0
+  ADDU $a0, $t0, $a0
+  ADDIU $a0, $a0, 1
+  JAL m_hailstone
+  ADDIU $v0, $v0, 1
+  SUBU $t3, $t0, $t2
+  SRL $t3, $t3, 31
+  BNE $t3, $zero, EXIT
+  LW $fp, 16($sp)
+  LW $ra, 20($sp)
+  ADDIU $sp, $sp, 24
+  JR $ra
+  nop
+
+EXIT:
+  SLL $t6, $t0, 2
+  ADDU $t6, $t6, $t1
+  LW $t6, 0($t6)
+  ADDU $v0, $v0, $t6
+  LW $fp, 16($sp)
+  LW $ra, 20($sp)
+  ADDIU $sp, $sp, 24
+  JR $ra
+  nop
